@@ -1,3 +1,23 @@
+#timer {
+  display: inline-block;
+  font-size: 4rem;
+  font-weight: bold;
+  color: #357ab8;
+  margin: 1.5rem auto 0 auto;
+  text-align: center;
+  letter-spacing: 2px;
+}
+/* Fun countdown animation for timer */
+#timer.countdown-animate {
+  animation: timerPop 0.5s;
+  color: #e74c3c;
+}
+@keyframes timerPop {
+  0% { transform: scale(1); color: #357ab8; }
+  30% { transform: scale(1.7); color: #e74c3c; }
+  60% { transform: scale(0.8); color: #f39c12; }
+  100% { transform: scale(1); color: #357ab8; }
+}
 /* Fade-in animation for draft results participants */
 .draft-fade-in {
   opacity: 0;
