@@ -155,16 +155,75 @@ function renderParticipants() {
 	participantList.innerHTML = '';
 	participants.forEach((name, idx) => {
 		const li = document.createElement('li');
-		li.textContent = name;
-		const delBtn = document.createElement('button');
-		delBtn.textContent = 'Delete';
-		delBtn.title = 'Delete participant';
-		delBtn.onclick = () => deleteParticipant(idx);
-		li.appendChild(delBtn);
+		if (editingParticipantIndex === idx) {
+			// Edit mode
+			const input = document.createElement('input');
+			input.type = 'text';
+			input.value = name;
+			input.className = 'edit-input';
+			input.autofocus = true;
+			input.setAttribute('aria-label', 'Edit participant name');
+			input.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter') saveParticipantEdit(idx, input.value);
+				if (e.key === 'Escape') { editingParticipantIndex = null; renderParticipants(); }
+			});
+
+			const saveBtn = document.createElement('button');
+			saveBtn.textContent = 'Save';
+			saveBtn.onclick = () => saveParticipantEdit(idx, input.value);
+
+			const cancelBtn = document.createElement('button');
+			cancelBtn.textContent = 'Cancel';
+			cancelBtn.onclick = () => { editingParticipantIndex = null; renderParticipants(); };
+
+			li.appendChild(input);
+			li.appendChild(saveBtn);
+			li.appendChild(cancelBtn);
+		} else {
+			// Display mode
+			const nameSpan = document.createElement('span');
+			nameSpan.textContent = name;
+			nameSpan.style.fontWeight = '500';
+			nameSpan.style.letterSpacing = '0.5px';
+			li.appendChild(nameSpan);
+
+			const actions = document.createElement('span');
+			actions.className = 'team-actions';
+
+			const editBtn = document.createElement('button');
+			editBtn.textContent = 'Edit';
+			editBtn.title = 'Edit participant name';
+			editBtn.onclick = () => { editingParticipantIndex = idx; renderParticipants(); };
+
+			const delBtn = document.createElement('button');
+			delBtn.textContent = 'Delete';
+			delBtn.title = 'Delete participant';
+			delBtn.onclick = () => deleteParticipant(idx);
+
+			actions.appendChild(editBtn);
+			actions.appendChild(delBtn);
+			li.appendChild(actions);
+		}
 		fadeInElement(li);
 		participantList.appendChild(li);
 	});
 	renderTeams(); // update startDraftBtn state
+}
+// Save participant edit
+function saveParticipantEdit(idx, newName) {
+	newName = newName.trim();
+	if (!newName) {
+		showError('Participant name cannot be empty.', participantError);
+		return;
+	}
+	if (participants.map((t, i) => i !== idx ? t.toLowerCase() : null).includes(newName.toLowerCase())) {
+		showError('Participant name must be unique.', participantError);
+		return;
+	}
+	participants[idx] = newName;
+	editingParticipantIndex = null;
+	clearError(participantError);
+	renderParticipants();
 }
 
 participantForm.onsubmit = function(e) {
