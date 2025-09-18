@@ -1,0 +1,153 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 480px;
+  margin: 3rem auto;
+  background: #fff;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px #0002, 0 1.5px 4px #0001;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  font-size: 2.1rem;
+  color: #2a3a4a;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #3a4a5a;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #e0e7ef;
+  padding-bottom: 0.3rem;
+}
+
+form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid #bfc9d1;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f7fafd;
+  transition: border 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: #4a90e2;
+  outline: none;
+  background: #fff;
+}
+
+button {
+  background: linear-gradient(90deg, #4a90e2 60%, #357ab8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 4px #4a90e220;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+button:disabled, .disabled {
+  background: #bfc9d1 !important;
+  color: #fff !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+  background: #f7fafd;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  box-shadow: 0 1px 2px #0001;
+  transition: background 0.2s;
+}
+
+li:hover {
+  background: #eaf2fa;
+}
+
+.team-actions button {
+  font-size: 0.95em;
+  padding: 0.3rem 0.7rem;
+  margin-left: 0.3rem;
+  background: #e0e7ef;
+  color: #357ab8;
+  border: 1px solid #bfc9d1;
+  box-shadow: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.team-actions button:hover:not(:disabled) {
+  background: #4a90e2;
+  color: #fff;
+  border-color: #4a90e2;
+}
+
+.edit-input {
+  width: 60%;
+  padding: 0.4rem 0.7rem;
+  font-size: 1em;
+  border: 1.5px solid #bfc9d1;
+  border-radius: 5px;
+  background: #fff;
+  margin-right: 0.5rem;
+}
+
+.error {
+  color: #c00;
+  margin-top: 0.5rem;
+  text-align: center;
+  min-height: 1.2em;
+  font-size: 1em;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+  }
+  h1 {
+    font-size: 1.3rem;
+  }
+  h2 {
+    font-size: 1rem;
+  }
+  button, input[type="text"] {
+    font-size: 0.98rem;
+  }
+}
