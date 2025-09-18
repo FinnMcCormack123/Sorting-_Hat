@@ -1,12 +1,20 @@
-// Team Management Logic for Draft Pick Application
+// Team and Participant Management Logic for Draft Pick Application
 let teams = [];
 let editingIndex = null;
+
+let participants = [];
+let editingParticipantIndex = null;
 
 const teamForm = document.getElementById('team-form');
 const teamNameInput = document.getElementById('team-name');
 const teamList = document.getElementById('team-list');
 const teamError = document.getElementById('team-error');
 const startDraftBtn = document.getElementById('start-draft');
+
+const participantForm = document.getElementById('participant-form');
+const participantNameInput = document.getElementById('participant-name');
+const participantList = document.getElementById('participant-list');
+const participantError = document.getElementById('participant-error');
 
 function fadeInElement(el) {
 	el.classList.add('fade-in');
@@ -71,47 +79,45 @@ function renderTeams() {
 	});
 
 	// Enable/disable Start Draft button
-	startDraftBtn.disabled = teams.length < 2;
-	if (teams.length < 2) {
-		startDraftBtn.title = 'Add at least 2 teams to start the draft.';
+	startDraftBtn.disabled = teams.length < 2 || participants.length < 2;
+	if (teams.length < 2 || participants.length < 2) {
+		startDraftBtn.title = 'Add at least 2 teams and 2 participants to start the draft.';
 	} else {
 		startDraftBtn.title = '';
 	}
 }
 
-function showError(msg) {
-	teamError.textContent = msg;
-	teamError.classList.add('fade-in');
-	setTimeout(() => teamError.classList.remove('fade-in'), 500);
+function showError(msg, errorDiv) {
+	errorDiv.textContent = msg;
+	errorDiv.classList.add('fade-in');
+	setTimeout(() => errorDiv.classList.remove('fade-in'), 500);
 }
 
-function clearError() {
-	teamError.textContent = '';
+function clearError(errorDiv) {
+	errorDiv.textContent = '';
 }
 
 teamForm.onsubmit = function(e) {
 	e.preventDefault();
 	const name = teamNameInput.value.trim();
 	if (!name) {
-		showError('Team name cannot be empty.');
+		showError('Team name cannot be empty.', teamError);
 		teamNameInput.focus();
 		return;
 	}
 	if (teams.map(t => t.toLowerCase()).includes(name.toLowerCase())) {
-		showError('Team name must be unique.');
+		showError('Team name must be unique.', teamError);
 		teamNameInput.focus();
 		return;
 	}
 	teams.push(name);
 	teamNameInput.value = '';
-	clearError();
+	clearError(teamError);
 	renderTeams();
-	// Animate the last item
 	if (teamList.lastChild) fadeInElement(teamList.lastChild);
 };
 
 function deleteTeam(idx) {
-	// Animate removal
 	const li = teamList.children[idx];
 	if (li) {
 		li.style.transition = 'opacity 0.3s';
@@ -131,17 +137,69 @@ function deleteTeam(idx) {
 function saveEdit(idx, newName) {
 	newName = newName.trim();
 	if (!newName) {
-		showError('Team name cannot be empty.');
+		showError('Team name cannot be empty.', teamError);
 		return;
 	}
 	if (teams.map((t, i) => i !== idx ? t.toLowerCase() : null).includes(newName.toLowerCase())) {
-		showError('Team name must be unique.');
+		showError('Team name must be unique.', teamError);
 		return;
 	}
 	teams[idx] = newName;
 	editingIndex = null;
-	clearError();
+	clearError(teamError);
 	renderTeams();
+}
+
+// Participants logic
+function renderParticipants() {
+	participantList.innerHTML = '';
+	participants.forEach((name, idx) => {
+		const li = document.createElement('li');
+		li.textContent = name;
+		const delBtn = document.createElement('button');
+		delBtn.textContent = 'Delete';
+		delBtn.title = 'Delete participant';
+		delBtn.onclick = () => deleteParticipant(idx);
+		li.appendChild(delBtn);
+		fadeInElement(li);
+		participantList.appendChild(li);
+	});
+	renderTeams(); // update startDraftBtn state
+}
+
+participantForm.onsubmit = function(e) {
+	e.preventDefault();
+	const name = participantNameInput.value.trim();
+	if (!name) {
+		showError('Participant name cannot be empty.', participantError);
+		participantNameInput.focus();
+		return;
+	}
+	if (participants.map(t => t.toLowerCase()).includes(name.toLowerCase())) {
+		showError('Participant name must be unique.', participantError);
+		participantNameInput.focus();
+		return;
+	}
+	participants.push(name);
+	participantNameInput.value = '';
+	clearError(participantError);
+	renderParticipants();
+	if (participantList.lastChild) fadeInElement(participantList.lastChild);
+};
+
+function deleteParticipant(idx) {
+	const li = participantList.children[idx];
+	if (li) {
+		li.style.transition = 'opacity 0.3s';
+		li.style.opacity = '0';
+		setTimeout(() => {
+			participants.splice(idx, 1);
+			renderParticipants();
+		}, 250);
+	} else {
+		participants.splice(idx, 1);
+		renderParticipants();
+	}
 }
 
 // Keyboard accessibility: focus input on page load
@@ -151,3 +209,4 @@ window.onload = () => {
 
 // Initial render
 renderTeams();
+renderParticipants();

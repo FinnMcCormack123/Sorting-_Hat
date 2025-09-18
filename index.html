@@ -16,7 +16,16 @@
     <div id="team-error" class="error"></div>
     <h2>Teams</h2>
     <ul id="team-list"></ul>
-    <button id="start-draft" disabled>Start Draft</button>
+
+    <h2>Participants</h2>
+    <form id="participant-form" autocomplete="off">
+      <input type="text" id="participant-name" placeholder="Enter participant name" required>
+      <button type="submit">Add Participant</button>
+    </form>
+    <div id="participant-error" class="error"></div>
+    <ul id="participant-list"></ul>
+
+  <button id="start-draft" disabled>Start Draft</button>
   </div>
   <script src="script.js"></script>
 </body>
