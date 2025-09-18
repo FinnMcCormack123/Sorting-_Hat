@@ -468,9 +468,9 @@ startDraftBtn.addEventListener('click', function() {
 	loadingDiv.style.maxWidth = '480px';
 	loadingDiv.style.margin = '3rem auto';
 	loadingDiv.style.textAlign = 'center';
-	loadingDiv.innerHTML = '<h2 style="color:#357ab8;">Assigning Participants...</h2><p style="font-size:1.2rem;">Please wait <span id="timer">5</span> seconds</p>';
+	loadingDiv.innerHTML = '<h2 style="color:#357ab8;">Assigning Participants...</h2><p style="font-size:1.2rem;">Please wait <span id="timer">3</span> seconds</p>';
 	container.replaceWith(loadingDiv);
-	let seconds = 5;
+	let seconds = 3;
 	const timerSpan = loadingDiv.querySelector('#timer');
 	const interval = setInterval(() => {
 		seconds--;
