@@ -307,6 +307,7 @@ function showDraftResults(assignments) {
 	Object.entries(assignments).forEach(([team, members], teamIdx) => {
 		const teamTitle = document.createElement('h3');
 		teamTitle.textContent = team;
+		teamTitle.style.textAlign = 'center';
 		resultsDiv.appendChild(teamTitle);
 
 		// Show/hide button
