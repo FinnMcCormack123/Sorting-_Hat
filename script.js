@@ -296,16 +296,40 @@ function showDraftResults(assignments) {
 	title.textContent = 'Draft Results';
 	resultsDiv.appendChild(title);
 
-	Object.entries(assignments).forEach(([team, members]) => {
+	Object.entries(assignments).forEach(([team, members], teamIdx) => {
 		const teamTitle = document.createElement('h3');
 		teamTitle.textContent = team;
 		resultsDiv.appendChild(teamTitle);
+
+		// Show/hide button
+		const showBtn = document.createElement('button');
+		showBtn.textContent = 'Show';
+		showBtn.className = 'restart-btn';
+		showBtn.style.margin = '0 0 1rem 0';
+		showBtn.style.fontSize = '1em';
+		showBtn.style.padding = '0.4rem 1.2rem';
+		showBtn.style.display = 'inline-block';
+
+		// Team members list (hidden by default)
 		const ul = document.createElement('ul');
+		ul.style.display = 'none';
 		members.forEach(member => {
 			const li = document.createElement('li');
 			li.textContent = member;
 			ul.appendChild(li);
 		});
+
+		showBtn.onclick = function() {
+			if (ul.style.display === 'none') {
+				ul.style.display = 'block';
+				showBtn.textContent = 'Hide';
+			} else {
+				ul.style.display = 'none';
+				showBtn.textContent = 'Show';
+			}
+		};
+
+		resultsDiv.appendChild(showBtn);
 		resultsDiv.appendChild(ul);
 	});
 
