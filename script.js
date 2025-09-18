@@ -329,22 +329,28 @@ function showDraftResults(assignments) {
 			ul.appendChild(li);
 		});
 
-			showBtn.onclick = function() {
-				if (ul.style.display === 'none') {
-					ul.style.display = 'block';
-					showBtn.textContent = 'Hide';
-					// Animate each li with a staggered fade-in
-					Array.from(ul.children).forEach((li, i) => {
-						li.classList.remove('draft-fade-in');
-						setTimeout(() => {
-							li.classList.add('draft-fade-in');
-						}, i * 120);
-					});
-				} else {
-					ul.style.display = 'none';
-					showBtn.textContent = 'Show';
-				}
-			};
+				showBtn.onclick = function() {
+					if (ul.style.display === 'none') {
+						ul.style.display = 'block';
+						showBtn.textContent = 'Hide';
+						// Hide all lis initially
+						Array.from(ul.children).forEach((li) => {
+							li.style.opacity = '0';
+							li.style.transform = 'translateY(10px)';
+						});
+						// Reveal each li one by one with animation
+								Array.from(ul.children).forEach((li, i) => {
+									setTimeout(() => {
+										li.style.transition = 'opacity 0.7s, transform 0.7s';
+										li.style.opacity = '1';
+										li.style.transform = 'none';
+									}, i * 800);
+								});
+					} else {
+						ul.style.display = 'none';
+						showBtn.textContent = 'Show';
+					}
+				};
 
 		resultsDiv.appendChild(showBtn);
 		resultsDiv.appendChild(ul);
