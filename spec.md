@@ -6,7 +6,6 @@ A single-page web application that allows users to create teams and randomly dis
 ## Tech Stack
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+)
 - **Storage**: In-memory storage (session-based)
-- **Deployment**: Single HTML file that can run in any modern web browser
 - **Dependencies**: None (completely self-contained)
 
 ## Core Requirements
@@ -41,7 +40,6 @@ A single-page web application that allows users to create teams and randomly dis
 2. **Draft Phase**
    - Visual draft board showing team assignments
    - Progress indicators (current round, team turn)
-   - "Next Pick" controls for user interaction
    - Real-time updates of remaining participants
 
 3. **Results Phase**

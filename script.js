@@ -285,9 +285,9 @@ function assignParticipantsToTeams() {
 }
 
 function showDraftResults(assignments) {
-	// Replace the team management box (container)
-	const container = document.querySelector('.container');
-	if (!container) return;
+	// Replace the team management box (container) or loadingDiv
+	let parentDiv = document.querySelector('.container') || document.getElementById('draft-loading');
+	if (!parentDiv) return;
 
 	const resultsDiv = document.createElement('div');
 	resultsDiv.id = 'draft-results';
@@ -316,14 +316,37 @@ function showDraftResults(assignments) {
 	restartBtn.onclick = () => window.location.reload();
 	resultsDiv.appendChild(restartBtn);
 
-	container.replaceWith(resultsDiv);
+	parentDiv.replaceWith(resultsDiv);
 	resultsDiv.scrollIntoView({ behavior: 'smooth' });
 }
 
 startDraftBtn.addEventListener('click', function() {
 	if (teams.length < 2 || participants.length < 2) return;
-	const assignments = assignParticipantsToTeams();
-	showDraftResults(assignments);
+	// Replace container with loading message
+	const container = document.querySelector('.container');
+	if (!container) return;
+	const loadingDiv = document.createElement('div');
+	loadingDiv.id = 'draft-loading';
+	loadingDiv.style.background = '#f7fafd';
+	loadingDiv.style.borderRadius = '14px';
+	loadingDiv.style.boxShadow = '0 6px 32px #0002, 0 1.5px 4px #0001';
+	loadingDiv.style.padding = '2rem 1.5rem 1.5rem 1.5rem';
+	loadingDiv.style.maxWidth = '480px';
+	loadingDiv.style.margin = '3rem auto';
+	loadingDiv.style.textAlign = 'center';
+	loadingDiv.innerHTML = '<h2 style="color:#357ab8;">Assigning Participants...</h2><p style="font-size:1.2rem;">Please wait <span id="timer">5</span> seconds</p>';
+	container.replaceWith(loadingDiv);
+	let seconds = 5;
+	const timerSpan = loadingDiv.querySelector('#timer');
+	const interval = setInterval(() => {
+		seconds--;
+		timerSpan.textContent = seconds;
+		if (seconds <= 0) {
+			clearInterval(interval);
+			const assignments = assignParticipantsToTeams();
+			showDraftResults(assignments);
+		}
+	}, 1000);
 });
 
 // Initial render
