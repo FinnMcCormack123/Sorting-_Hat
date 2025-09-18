@@ -364,50 +364,72 @@ function showDraftResults(assignments) {
 			historyDiv.id = 'draft-history';
 			historyDiv.style.display = 'none';
 			historyDiv.style.marginTop = '1.2rem';
-			historyDiv.style.background = '#fff';
-			historyDiv.style.borderRadius = '10px';
-			historyDiv.style.boxShadow = '0 2px 8px #0001';
-			historyDiv.style.padding = '1.2rem';
-			historyDiv.style.maxWidth = '480px';
-			historyDiv.style.marginLeft = 'auto';
-			historyDiv.style.marginRight = 'auto';
+				historyDiv.style.background = '#f7fafd';
+				historyDiv.style.borderRadius = '14px';
+				historyDiv.style.boxShadow = '0 6px 32px #0002, 0 1.5px 4px #0001';
+				historyDiv.style.padding = '2rem 1.5rem 1.5rem 1.5rem';
+				historyDiv.style.maxWidth = '480px';
+				historyDiv.style.marginLeft = 'auto';
+				historyDiv.style.marginRight = 'auto';
+				historyDiv.style.border = '1.5px solid #e0e7ef';
 
 			const histTitle = document.createElement('h2');
 			histTitle.textContent = 'Draft History';
-			histTitle.style.fontSize = '1.3rem';
-			histTitle.style.color = '#357ab8';
-			histTitle.style.textAlign = 'center';
+				histTitle.style.fontSize = '1.5rem';
+				histTitle.style.color = '#357ab8';
+				histTitle.style.textAlign = 'center';
+				histTitle.style.marginBottom = '1.2rem';
 			historyDiv.appendChild(histTitle);
 
-			draftHistory.forEach((draft, i) => {
-				const draftBlock = document.createElement('div');
-				draftBlock.style.marginBottom = '1.2rem';
-				draftBlock.style.padding = '0.7rem 0.5rem';
-				draftBlock.style.background = '#f7fafd';
-				draftBlock.style.borderRadius = '7px';
-				draftBlock.style.boxShadow = '0 1px 2px #0001';
-				const roundTitle = document.createElement('div');
-				roundTitle.textContent = `Draft #${i + 1}`;
-				roundTitle.style.fontWeight = 'bold';
-				roundTitle.style.marginBottom = '0.3rem';
-				draftBlock.appendChild(roundTitle);
-				Object.entries(draft).forEach(([team, members]) => {
-					const teamTitle = document.createElement('div');
-					teamTitle.textContent = team;
-					teamTitle.style.color = '#4a90e2';
-					teamTitle.style.fontWeight = '500';
-					draftBlock.appendChild(teamTitle);
-					const ul = document.createElement('ul');
-					ul.style.marginBottom = '0.5rem';
-					members.forEach(member => {
-						const li = document.createElement('li');
-						li.textContent = member;
-						ul.appendChild(li);
+				draftHistory.forEach((draft, i) => {
+					const draftBlock = document.createElement('div');
+					draftBlock.style.marginBottom = '1.5rem';
+					draftBlock.style.padding = '1.1rem 0.7rem 0.7rem 0.7rem';
+					draftBlock.style.background = '#fff';
+					draftBlock.style.borderRadius = '10px';
+					draftBlock.style.boxShadow = '0 1px 4px #0001';
+					draftBlock.style.border = '1px solid #e0e7ef';
+					draftBlock.style.transition = 'box-shadow 0.2s';
+					draftBlock.onmouseover = () => draftBlock.style.boxShadow = '0 4px 16px #4a90e220';
+					draftBlock.onmouseout = () => draftBlock.style.boxShadow = '0 1px 4px #0001';
+
+					const roundTitle = document.createElement('div');
+					roundTitle.textContent = `Draft #${i + 1}`;
+					roundTitle.style.fontWeight = 'bold';
+					roundTitle.style.marginBottom = '0.5rem';
+					roundTitle.style.fontSize = '1.1rem';
+					roundTitle.style.textAlign = 'center';
+					roundTitle.style.color = '#357ab8';
+					draftBlock.appendChild(roundTitle);
+
+					Object.entries(draft).forEach(([team, members]) => {
+						const teamTitle = document.createElement('div');
+						teamTitle.textContent = team;
+						teamTitle.style.color = '#4a90e2';
+						teamTitle.style.fontWeight = '500';
+						teamTitle.style.textAlign = 'center';
+						teamTitle.style.margin = '0.5rem 0 0.2rem 0';
+						draftBlock.appendChild(teamTitle);
+						const ul = document.createElement('ul');
+						ul.style.marginBottom = '0.5rem';
+						ul.style.background = '#eaf2fa';
+						ul.style.borderRadius = '7px';
+						ul.style.padding = '0.5rem 1rem';
+						ul.style.boxShadow = '0 1px 2px #0001';
+						members.forEach(member => {
+							const li = document.createElement('li');
+							li.textContent = member;
+							li.style.padding = '0.3rem 0.2rem';
+							li.style.fontSize = '1.01rem';
+							li.style.borderBottom = '1px solid #dbe7f3';
+							li.style.transition = 'background 0.2s, color 0.2s';
+							ul.appendChild(li);
+						});
+						if (ul.children.length > 0) ul.lastChild.style.borderBottom = 'none';
+						draftBlock.appendChild(ul);
 					});
-					draftBlock.appendChild(ul);
+					historyDiv.appendChild(draftBlock);
 				});
-				historyDiv.appendChild(draftBlock);
-			});
 
 			// Toggle history visibility
 			historyBtn.onclick = () => {
