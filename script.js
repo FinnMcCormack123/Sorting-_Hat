@@ -1,3 +1,5 @@
+// Store draft history in memory
+let draftHistory = [];
 // Team and Participant Management Logic for Draft Pick Application
 let teams = [];
 let editingIndex = null;
@@ -289,6 +291,8 @@ function assignParticipantsToTeams() {
 }
 
 function showDraftResults(assignments) {
+	// Save to draft history
+	draftHistory.push(JSON.parse(JSON.stringify(assignments)));
 	// Replace the team management box (container) or loadingDiv
 	let parentDiv = document.querySelector('.container') || document.getElementById('draft-loading');
 	if (!parentDiv) return;
@@ -344,8 +348,73 @@ function showDraftResults(assignments) {
 	restartBtn.onclick = () => window.location.reload();
 	resultsDiv.appendChild(restartBtn);
 
-	parentDiv.replaceWith(resultsDiv);
-	resultsDiv.scrollIntoView({ behavior: 'smooth' });
+		parentDiv.replaceWith(resultsDiv);
+		resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+			// Draft history toggle button and section
+			let historyBtn = document.createElement('button');
+			historyBtn.textContent = 'Draft History';
+			historyBtn.className = 'restart-btn';
+			historyBtn.style.margin = '2.5rem auto 0 auto';
+			historyBtn.style.display = 'block';
+
+			let historyDiv = document.createElement('div');
+			historyDiv.id = 'draft-history';
+			historyDiv.style.display = 'none';
+			historyDiv.style.marginTop = '1.2rem';
+			historyDiv.style.background = '#fff';
+			historyDiv.style.borderRadius = '10px';
+			historyDiv.style.boxShadow = '0 2px 8px #0001';
+			historyDiv.style.padding = '1.2rem';
+			historyDiv.style.maxWidth = '480px';
+			historyDiv.style.marginLeft = 'auto';
+			historyDiv.style.marginRight = 'auto';
+
+			const histTitle = document.createElement('h2');
+			histTitle.textContent = 'Draft History';
+			histTitle.style.fontSize = '1.3rem';
+			histTitle.style.color = '#357ab8';
+			histTitle.style.textAlign = 'center';
+			historyDiv.appendChild(histTitle);
+
+			draftHistory.forEach((draft, i) => {
+				const draftBlock = document.createElement('div');
+				draftBlock.style.marginBottom = '1.2rem';
+				draftBlock.style.padding = '0.7rem 0.5rem';
+				draftBlock.style.background = '#f7fafd';
+				draftBlock.style.borderRadius = '7px';
+				draftBlock.style.boxShadow = '0 1px 2px #0001';
+				const roundTitle = document.createElement('div');
+				roundTitle.textContent = `Draft #${i + 1}`;
+				roundTitle.style.fontWeight = 'bold';
+				roundTitle.style.marginBottom = '0.3rem';
+				draftBlock.appendChild(roundTitle);
+				Object.entries(draft).forEach(([team, members]) => {
+					const teamTitle = document.createElement('div');
+					teamTitle.textContent = team;
+					teamTitle.style.color = '#4a90e2';
+					teamTitle.style.fontWeight = '500';
+					draftBlock.appendChild(teamTitle);
+					const ul = document.createElement('ul');
+					ul.style.marginBottom = '0.5rem';
+					members.forEach(member => {
+						const li = document.createElement('li');
+						li.textContent = member;
+						ul.appendChild(li);
+					});
+					draftBlock.appendChild(ul);
+				});
+				historyDiv.appendChild(draftBlock);
+			});
+
+			// Toggle history visibility
+			historyBtn.onclick = () => {
+				historyDiv.style.display = historyDiv.style.display === 'none' ? 'block' : 'none';
+			};
+
+			// Add button and history below results
+			resultsDiv.parentNode.insertBefore(historyBtn, resultsDiv.nextSibling);
+			resultsDiv.parentNode.insertBefore(historyDiv, historyBtn.nextSibling);
 }
 
 startDraftBtn.addEventListener('click', function() {
