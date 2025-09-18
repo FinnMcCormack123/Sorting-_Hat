@@ -207,6 +207,68 @@ window.onload = () => {
 	teamNameInput.focus();
 };
 
+// Randomly assign participants to teams and display results
+function assignParticipantsToTeams() {
+	// Shuffle participants
+	const shuffled = [...participants];
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	// Assign to teams in round-robin
+	const teamAssignments = {};
+	teams.forEach(team => teamAssignments[team] = []);
+	shuffled.forEach((p, i) => {
+		const team = teams[i % teams.length];
+		teamAssignments[team].push(p);
+	});
+	return teamAssignments;
+}
+
+function showDraftResults(assignments) {
+	// Replace the team management box (container)
+	const container = document.querySelector('.container');
+	if (!container) return;
+
+	const resultsDiv = document.createElement('div');
+	resultsDiv.id = 'draft-results';
+	resultsDiv.style.background = '#f7fafd';
+	resultsDiv.style.borderRadius = '10px';
+	resultsDiv.style.boxShadow = '0 2px 8px #0001';
+	resultsDiv.style.padding = '1.5rem';
+	resultsDiv.style.maxWidth = '480px';
+	resultsDiv.style.margin = '3rem auto';
+
+	const title = document.createElement('h2');
+	title.textContent = 'Draft Results';
+	title.style.textAlign = 'center';
+	resultsDiv.appendChild(title);
+
+	Object.entries(assignments).forEach(([team, members]) => {
+		const teamTitle = document.createElement('h3');
+		teamTitle.textContent = team;
+		teamTitle.style.marginBottom = '0.3rem';
+		resultsDiv.appendChild(teamTitle);
+		const ul = document.createElement('ul');
+		ul.style.marginBottom = '1rem';
+		members.forEach(member => {
+			const li = document.createElement('li');
+			li.textContent = member;
+			ul.appendChild(li);
+		});
+		resultsDiv.appendChild(ul);
+	});
+
+	container.replaceWith(resultsDiv);
+	resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+startDraftBtn.addEventListener('click', function() {
+	if (teams.length < 2 || participants.length < 2) return;
+	const assignments = assignParticipantsToTeams();
+	showDraftResults(assignments);
+});
+
 // Initial render
 renderTeams();
 renderParticipants();
