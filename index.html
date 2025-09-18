@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Draft Pick Application</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1 { margin-bottom: 1rem; }
+    .container { max-width: 500px; margin: auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+    button { margin-left: 0.5rem; }
+    .error { color: #c00; margin-top: 0.5rem; }
+    .team-actions button { font-size: 0.9em; }
+    .edit-input { width: 60%; }
+    .disabled { opacity: 0.5; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Team Management</h1>
+    <form id="team-form" autocomplete="off">
+      <input type="text" id="team-name" placeholder="Enter team name" required>
+      <button type="submit">Add Team</button>
+    </form>
+    <div id="team-error" class="error"></div>
+    <h2>Teams</h2>
+    <ul id="team-list"></ul>
+    <button id="start-draft" disabled>Start Draft</button>
+  </div>
+  <script>
+    // In-memory team storage
+    let teams = [];
+    let editingIndex = null;
+
+    const teamForm = document.getElementById('team-form');
+    const teamNameInput = document.getElementById('team-name');
+    const teamList = document.getElementById('team-list');
+    const teamError = document.getElementById('team-error');
+    const startDraftBtn = document.getElementById('start-draft');
+
+    function renderTeams() {
+      teamList.innerHTML = '';
+      teams.forEach((team, idx) => {
+        const li = document.createElement('li');
+        if (editingIndex === idx) {
+          // Edit mode
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = team;
+          input.className = 'edit-input';
+          input.autofocus = true;
+
+          const saveBtn = document.createElement('button');
+          saveBtn.textContent = 'Save';
+          saveBtn.onclick = () => saveEdit(idx, input.value);
+
+          const cancelBtn = document.createElement('button');
+          cancelBtn.textContent = 'Cancel';
+          cancelBtn.onclick = () => { editingIndex = null; renderTeams(); };
+
+          li.appendChild(input);
+          li.appendChild(saveBtn);
+          li.appendChild(cancelBtn);
+        } else {
+          // Display mode
+          li.textContent = team;
+          const actions = document.createElement('span');
+          actions.className = 'team-actions';
+
+          const editBtn = document.createElement('button');
+          editBtn.textContent = 'Edit';
+          editBtn.onclick = () => { editingIndex = idx; renderTeams(); };
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = 'Delete';
+          deleteBtn.onclick = () => deleteTeam(idx);
+
+          actions.appendChild(editBtn);
+          actions.appendChild(deleteBtn);
+          li.appendChild(actions);
+        }
+        teamList.appendChild(li);
+      });
+
+      // Enable/disable Start Draft button
+      startDraftBtn.disabled = teams.length < 2;
+    }
+
+    function showError(msg) {
+      teamError.textContent = msg;
+    }
+
+    function clearError() {
+      teamError.textContent = '';
+    }
+
+    teamForm.onsubmit = function(e) {
+      e.preventDefault();
+      const name = teamNameInput.value.trim();
+      if (!name) {
+        showError('Team name cannot be empty.');
+        return;
+      }
+      if (teams.includes(name)) {
+        showError('Team name must be unique.');
+        return;
+      }
+      teams.push(name);
+      teamNameInput.value = '';
+      clearError();
+      renderTeams();
+    };
+
+    function deleteTeam(idx) {
+      teams.splice(idx, 1);
+      if (editingIndex === idx) editingIndex = null;
+      renderTeams();
+    }
+
+    function saveEdit(idx, newName) {
+      newName = newName.trim();
+      if (!newName) {
+        showError('Team name cannot be empty.');
+        return;
+      }
+      if (teams.includes(newName) && teams[idx] !== newName) {
+        showError('Team name must be unique.');
+        return;
+      }
+      teams[idx] = newName;
+      editingIndex = null;
+      clearError();
+      renderTeams();
+    }
+
+    // Initial render
+    renderTeams();
+  </script>
+</body>
+</html>
