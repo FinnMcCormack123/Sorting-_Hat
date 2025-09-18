@@ -232,25 +232,16 @@ function showDraftResults(assignments) {
 
 	const resultsDiv = document.createElement('div');
 	resultsDiv.id = 'draft-results';
-	resultsDiv.style.background = '#f7fafd';
-	resultsDiv.style.borderRadius = '10px';
-	resultsDiv.style.boxShadow = '0 2px 8px #0001';
-	resultsDiv.style.padding = '1.5rem';
-	resultsDiv.style.maxWidth = '480px';
-	resultsDiv.style.margin = '3rem auto';
 
 	const title = document.createElement('h2');
 	title.textContent = 'Draft Results';
-	title.style.textAlign = 'center';
 	resultsDiv.appendChild(title);
 
 	Object.entries(assignments).forEach(([team, members]) => {
 		const teamTitle = document.createElement('h3');
 		teamTitle.textContent = team;
-		teamTitle.style.marginBottom = '0.3rem';
 		resultsDiv.appendChild(teamTitle);
 		const ul = document.createElement('ul');
-		ul.style.marginBottom = '1rem';
 		members.forEach(member => {
 			const li = document.createElement('li');
 			li.textContent = member;
@@ -258,6 +249,13 @@ function showDraftResults(assignments) {
 		});
 		resultsDiv.appendChild(ul);
 	});
+
+	// Add a restart button
+	const restartBtn = document.createElement('button');
+	restartBtn.textContent = 'Restart Draft';
+	restartBtn.className = 'restart-btn';
+	restartBtn.onclick = () => window.location.reload();
+	resultsDiv.appendChild(restartBtn);
 
 	container.replaceWith(resultsDiv);
 	resultsDiv.scrollIntoView({ behavior: 'smooth' });
