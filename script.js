@@ -313,10 +313,11 @@ function showDraftResults(assignments) {
 		const showBtn = document.createElement('button');
 		showBtn.textContent = 'Show';
 		showBtn.className = 'restart-btn';
-		showBtn.style.margin = '0 0 1rem 0';
+		showBtn.style.display = 'block';
+		showBtn.style.margin = '0.7rem auto 1rem auto';
+		showBtn.style.width = '100%';
 		showBtn.style.fontSize = '1em';
-		showBtn.style.padding = '0.4rem 1.2rem';
-		showBtn.style.display = 'inline-block';
+		showBtn.style.padding = '0.7rem 0';
 
 		// Team members list (hidden by default)
 		const ul = document.createElement('ul');
