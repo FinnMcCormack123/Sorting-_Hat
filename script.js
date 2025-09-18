@@ -99,6 +99,10 @@ function clearError(errorDiv) {
 
 teamForm.onsubmit = function(e) {
 	e.preventDefault();
+	if (teams.length >= 8) {
+		showError('You can only have up to 8 teams.', teamError);
+		return;
+	}
 	const name = teamNameInput.value.trim();
 	if (!name) {
 		showError('Team name cannot be empty.', teamError);
