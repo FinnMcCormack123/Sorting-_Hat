@@ -329,15 +329,22 @@ function showDraftResults(assignments) {
 			ul.appendChild(li);
 		});
 
-		showBtn.onclick = function() {
-			if (ul.style.display === 'none') {
-				ul.style.display = 'block';
-				showBtn.textContent = 'Hide';
-			} else {
-				ul.style.display = 'none';
-				showBtn.textContent = 'Show';
-			}
-		};
+			showBtn.onclick = function() {
+				if (ul.style.display === 'none') {
+					ul.style.display = 'block';
+					showBtn.textContent = 'Hide';
+					// Animate each li with a staggered fade-in
+					Array.from(ul.children).forEach((li, i) => {
+						li.classList.remove('draft-fade-in');
+						setTimeout(() => {
+							li.classList.add('draft-fade-in');
+						}, i * 120);
+					});
+				} else {
+					ul.style.display = 'none';
+					showBtn.textContent = 'Show';
+				}
+			};
 
 		resultsDiv.appendChild(showBtn);
 		resultsDiv.appendChild(ul);
